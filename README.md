@@ -48,33 +48,40 @@
 1. **Клонируйте репозиторий:**
    ```bash
    git clone <repo_url>
-   cd foodgram
+   cd foodgram-backend-api
    ```
 
 2. **Настройте переменные окружения** (см. раздел ниже):
-	```bash
-	cp .env.example .env
-	# Отредактируйте .env
+
+   ```bash
+   cp .env.example .env
+   # Отредактируйте .env
    ```
+
 3. **Запустите проект через Docker Compose:**
-	```bash
-	docker compose up --build
+
+   ```bash
+   docker compose up -d
    ```
-	Приложение будет доступно по адресу: **[http://localhost:8000](http://localhost:8000)** (порт может отличаться в зависимости от конфигурации).
+
+   Приложение будет доступно по адресу: **[http://localhost:8000](http://localhost:8000)** (порт может отличаться в зависимости от конфигурации).
 
 ### Запуск в продакшене
 
 1. Настройте сервер (VPS) с установленными Docker и Docker Compose.
 2. Настройте SSH-доступ для CI/CD (если используете автоматический деплой).
-3. Скопируйте `docker-compose.production.yml` на сервер и выполните:
-	```bash
-	sudo docker compose -f docker-compose.production.yml pull
-	sudo docker compose -f docker-compose.production.yml up -d
+3. Скопируйте `docker-compose.yml` на сервер и выполните:
+
+   ```bash
+   sudo docker compose pull
+   sudo docker compose up -d
    ```
 
 ### Альтернативный запуск (без Docker)
 
-Для разработки можно запустить проект локально без Docker:
+Для разработки можно запустить проект локально без Docker. Если переменные
+окружения для PostgreSQL не заданы (нет `POSTGRES_DB`), Django автоматически
+переключается на SQLite.
 
 ```bash
 cd backend
@@ -82,6 +89,7 @@ python -m venv venv
 source venv/bin/activate  # или venv\\Scripts\\activate на Windows
 pip install -r requirements.txt
 python manage.py migrate
+python manage.py load_ingredients ../data/ingredients.csv  # загрузка ингредиентов из data/ingredients.csv
 python manage.py runserver
 ```
 
@@ -129,7 +137,7 @@ cp .env.example .env
 
 ## 📝 Лицензия
 
-Проект распространяется под лицензией [MIT](https://LICENSE).
+Проект распространяется под лицензией [MIT](LICENSE).
 
 ---
 
