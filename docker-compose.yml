@@ -1,0 +1,44 @@
+services:
+    db:
+        image: postgres:13
+        env_file: .env
+        volumes:
+            - pg_data:/var/lib/postgresql/data
+        restart: always
+
+    backend:
+        image: yoleshe/foodgram_backend
+        env_file: .env
+        depends_on:
+            - db
+        volumes:
+            - static:/backend_static
+            - media:/app/media
+        restart: always
+
+    frontend:
+        image: yoleshe/foodgram_frontend
+        env_file: .env
+        command: cp -r /app/build/. /static/
+        depends_on:
+            - backend
+        volumes:
+            - static:/static
+        restart: always
+
+    gateway:
+        image: yoleshe/foodgram_gateway
+        env_file: .env
+        ports:
+            - 8000:80
+        volumes:
+            - static:/static
+            - media:/app/media
+        depends_on:
+            - backend
+        restart: always
+
+volumes:
+    pg_data:
+    static:
+    media:
